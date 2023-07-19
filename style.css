@@ -5,7 +5,7 @@
 }
 
 .index{
-	background-image:url(../image/img2.jpg) ; 
+	background-image:url(image/img2.jpg) ; 
 	height: 100vh;
 	background-size: cover;
 	background-position: center;
@@ -50,12 +50,6 @@ ul li a:hover{
 	left: 45%;
 	right:70%;
 	transform: translate(-15%,-15%);
-}
-
-.border{
-	width: 100px;
-	height: 100px;
-	
 }
 
 .contact-form{
