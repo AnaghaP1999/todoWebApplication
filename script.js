@@ -1,22 +1,32 @@
+// Login function
 function login() {
   var username = document.getElementById("username").value;
   var password = document.getElementById("pswd").value;
-  msg1.innerHTML="";
-  msg2.innerHTML="";
-  if(username == 'admin' && password == '12345') {
+  msg1.innerHTML = "";
+  msg2.innerHTML = "";
+  if (username == "admin" && password == "12345") {
     window.location.assign('main-page.html');
     alert("Login Successfully");
-  } else {  
+  } else {
     try {
-        if(username != "admin")throw "wrong username"
-        if(password != "12345")throw "wrong password"
+      if (username != "admin") throw "Wrong username";
+      if (password != "12345") throw "Wrong password";
     } catch (error) {
-        msg1.innerHTML = error
-        msg2.innerHTML = error
-    } 
+      msg1.innerHTML = error;
+      msg2.innerHTML = error;
+    }
   }
 }
 
+// Populate table with data from API
+function createCheckbox(checked) {
+  const checkbox = document.createElement('input');
+  checkbox.type = 'checkbox';
+  checkbox.checked = checked;
+  return checkbox;
+}
+
+// Populate table with data from API
 const tableBody = document.querySelector('#data-table tbody');
 
 fetch('https://jsonplaceholder.typicode.com/todos')
@@ -38,47 +48,44 @@ fetch('https://jsonplaceholder.typicode.com/todos')
       row.appendChild(titleCell);
 
       const checkboxCell = document.createElement('td');
-      const checkbox = document.createElement('input');
-      if(item.completed == true) {
-        checkbox.checked = true;
-      }
-      checkbox.type = 'checkbox';
+      const checkbox = createCheckbox(item.completed);
       checkboxCell.appendChild(checkbox);
       row.appendChild(checkboxCell);
-      
+
       tableBody.appendChild(row);
     });
+
+    // Check checkbox count using Promise
+    checkCheckboxCount()
+      .then(() => {
+        alert(' Congrats. 5 Tasks have been Successfully Completed');
+      })
+      .catch(() => {
+         console.log("Task not completed");
+      });
   })
   .catch(error => {
     console.error('Error:', error);
   });
 
+// Check checkbox count using Promise
 function checkCheckboxCount() {
   return new Promise((resolve, reject) => {
     const checkboxes = document.querySelectorAll('#data-table input[type="checkbox"]');
-   
     let checkedCount = 0;
 
     checkboxes.forEach(checkbox => {
       checkbox.addEventListener('change', () => {
-
-        checkedCount = Array.from(checkboxes).filter(checkbox => checkbox.checked).length;
+        if (checkbox.checked) {
+          checkedCount++;
+        } else {
+          checkedCount--;
+        }
 
         if (checkedCount === 5) {
           resolve();
-        } else {
-          reject();
-        }
+        } 
       });
     });
   });
 }
-
-
-checkCheckboxCount()
-  .then(() => {
-    alert('You have checked five checkboxes!');
-  })
-  .catch(() => {
-
-  });
